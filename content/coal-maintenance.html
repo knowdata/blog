@@ -194,7 +194,7 @@ These machines require maintenance when within the <strong>previous month</stron
 <li><p>Communicate our results.</p>
 </li>
 </ol>
-<p>I already created this assignment in Tableau. You can check it out <a href="https://public.tableau.com/profile/knowdata#!/vizhome/Coal_5/Report"><strong>here</strong></a>.   Tableau is extremely fast and easy to conduct analysis of this nature. Working with data in Python is expressive, it helps to build the intuition behind data whereas in Tableau it all seems like magic.</p>
+<p>I already created this assignment in Tableau. You can check it out <a href="https://public.tableau.com/profile/knowdata#!/vizhome/Coal_5/Report"><strong>here</strong></a>.   Tableau is extremely fast and easy to conduct analysis of this nature. However, working with data in Python is expressive, it helps to build the intuition behind processes whereas in Tableau it all seems like magic.</p>
 <p>Lets dive in!</p>
 <hr>
 <p><strong>This post is a re-creation of a mock up assignment by a course taught by Kirill Eremenko titled <a href="https://www.udemy.com/tableau-advanced/?LSNPUBID=*JDLXjeE*wk&siteID=.JDLXjeE.wk-St5xoOJ9R6Pvxqt13zgOWg">Tableau 9 Advanced Training: Master Tableau for Data Science</a>. I highly reccomend this course if you're interested in learning Tableau and solving real life analytical problems.</strong></p>
@@ -235,7 +235,7 @@ These machines require maintenance when within the <strong>previous month</stron
 <div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#load data</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># load data</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;rl1.csv&#39;</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;Datetime&#39;</span><span class="p">)</span>
 </pre></div>
 
@@ -249,7 +249,7 @@ These machines require maintenance when within the <strong>previous month</stron
 <div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Inspect table</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># inspect table</span>
 <span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 
@@ -355,7 +355,7 @@ These machines require maintenance when within the <strong>previous month</stron
 <div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#tactic to keep only the  columns we need.</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># tactic to keep only the  columns we need.</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[[</span><span class="s1">&#39;Nominal Capacity&#39;</span><span class="p">,</span> <span class="s1">&#39;Actual Tonnes&#39;</span><span class="p">]]</span>
 </pre></div>
 
@@ -479,7 +479,7 @@ These machines require maintenance when within the <strong>previous month</stron
 <div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># calculate moving averge with a 8-hour window</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># calculate moving average with a 8-hour window</span>
 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;moving_average&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">idle_capacity</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">center</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 </pre></div>
 
@@ -493,7 +493,7 @@ These machines require maintenance when within the <strong>previous month</stron
 <div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># take a look at plots to gauge the data</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># display plots to gauge the data</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">311</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;actual_tonnes&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Actual Tonnes&#39;</span><span class="p">)</span>
@@ -4094,7 +4094,7 @@ RK5CYII=
 <div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># display hours that exceeds Threshold</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># display hours that exceeds threshold.</span>
 <span class="n">spikes</span>
 </pre></div>
 
