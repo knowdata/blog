@@ -4328,29 +4328,12 @@ RK5CYII=
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Report">Report<a class="anchor-link" href="#Report">&#182;</a></h3><hr>
-<p>Our findings illustrates the 8-hour moving average of idle capacity for Reclaimer 1 expresed as a percentage of nominal capacity.</p>
-<p>Throughout the month RL1 exceeded the allowable threshold multiple times:</p>
-<p>Rolling average peaked @ 14% on 9-02-2015</p>
-<p>Rolling average peaked @ 12% on 9-14-2015</p>
-<p>Rolling average peaked @ 15% on 9-21-2015</p>
-<p>Rolling average peaked @ 13% on 3-30-2015</p>
-<p>It is evident that this machine requires maintenance in the upcoming month.</p>
-
-</div>
-</div>
-</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># plot points exceeding threshold</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># plot days that exceed the 10% threshold.</span>
 <span class="n">spikes</span><span class="o">.</span><span class="n">moving_average</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="p">)</span>
 </pre></div>
 
@@ -4366,7 +4349,7 @@ RK5CYII=
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x10e326748&gt;</pre>
+<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x10e56e898&gt;</pre>
 </div>
 
 </div>
@@ -4619,6 +4602,23 @@ ZmfwxqMAAAAASUVORK5CYII=
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Report">Report<a class="anchor-link" href="#Report">&#182;</a></h3><hr>
+<p>Our findings illustrates the 8-hour moving average of idle capacity for Reclaimer 1 expresed as a percentage of nominal capacity.</p>
+<p>Throughout the month RL1 exceeded the allowable threshold multiple times:</p>
+<p>Rolling average peaked @ 14% on 9-02-2015</p>
+<p>Rolling average peaked @ 12% on 9-14-2015</p>
+<p>Rolling average peaked @ 15% on 9-21-2015</p>
+<p>Rolling average peaked @ 13% on 3-30-2015</p>
+<p>It is evident that this machine requires maintenance in the upcoming month.</p>
+
+</div>
+</div>
 </div>
     </div>
   </div>
