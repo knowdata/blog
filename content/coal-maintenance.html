@@ -184,7 +184,13 @@ div#notebook {
 <p>The challenge is to use the metric <strong>idle capacity</strong> to asesss which of the machines require maintenance.
 These machines require maintenance when within the <strong>previous month</strong> there was at least one <strong>8-hour period</strong> when the average idle was over <strong>10%</strong>.</p>
 <p>The idle capacity metric is defined as follows:</p>
-<p>$ {(Actual -  Tonnes - Nominal -  Capacity) \over Nominal -  Capacity} $</p>
+<p>$ Idle-Capacity =  {(Actual -  Tonnes - Nominal -  Capacity) \over Nominal -  Capacity} $</p>
+<p>Idle capacity represents unused capacity for the hour.
+In a nutshell, the tasks requires us to assess if the average of 8 hours exceeds 10% then the machine requires 
+maintenance.</p>
+<h4 id="Some-info-about-the-data:">Some info about the data:<a class="anchor-link" href="#Some-info-about-the-data:">&#182;</a></h4><p>Datetime - hourly.</p>
+<p>Actual Tonnage - utilization per hour.</p>
+<p>Nominal Capacity - Nominal capacity for the machine is 4200 tons. Think of nominal as the approximation of accepted conditions.</p>
 <p>We will break this process down into 3 steps.</p>
 <ol>
 <li><p>Inspect and clean data</p>
@@ -235,7 +241,7 @@ These machines require maintenance when within the <strong>previous month</stron
 <div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># load data</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># load data, parse the dates and set Datetime as index.</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;rl1.csv&#39;</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;Datetime&#39;</span><span class="p">)</span>
 </pre></div>
 
@@ -491,6 +497,161 @@ These machines require maintenance when within the <strong>previous month</stron
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># inspect the first 15 rows of the table using head function</span>
+<span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">Out[9]:</div>
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>nominal_capacity</th>
+      <th>actual_tonnes</th>
+      <th>idle_capacity</th>
+      <th>moving_average</th>
+    </tr>
+    <tr>
+      <th>Datetime</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2015-09-01 00:00:00</th>
+      <td>4200</td>
+      <td>4200</td>
+      <td>0.000000</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2015-09-01 01:00:00</th>
+      <td>4200</td>
+      <td>3941</td>
+      <td>-0.061667</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2015-09-01 02:00:00</th>
+      <td>4200</td>
+      <td>3950</td>
+      <td>-0.059524</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2015-09-01 03:00:00</th>
+      <td>4200</td>
+      <td>4200</td>
+      <td>0.000000</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2015-09-01 04:00:00</th>
+      <td>4200</td>
+      <td>4041</td>
+      <td>-0.037857</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2015-09-01 05:00:00</th>
+      <td>4200</td>
+      <td>4200</td>
+      <td>0.000000</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2015-09-01 06:00:00</th>
+      <td>4200</td>
+      <td>4198</td>
+      <td>-0.000476</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2015-09-01 07:00:00</th>
+      <td>4200</td>
+      <td>4200</td>
+      <td>0.000000</td>
+      <td>-0.019940</td>
+    </tr>
+    <tr>
+      <th>2015-09-01 08:00:00</th>
+      <td>4200</td>
+      <td>4199</td>
+      <td>-0.000238</td>
+      <td>-0.019970</td>
+    </tr>
+    <tr>
+      <th>2015-09-01 09:00:00</th>
+      <td>4200</td>
+      <td>3900</td>
+      <td>-0.071429</td>
+      <td>-0.021190</td>
+    </tr>
+    <tr>
+      <th>2015-09-01 10:00:00</th>
+      <td>4200</td>
+      <td>4200</td>
+      <td>0.000000</td>
+      <td>-0.013750</td>
+    </tr>
+    <tr>
+      <th>2015-09-01 11:00:00</th>
+      <td>4200</td>
+      <td>4018</td>
+      <td>-0.043333</td>
+      <td>-0.019167</td>
+    </tr>
+    <tr>
+      <th>2015-09-01 12:00:00</th>
+      <td>4200</td>
+      <td>3648</td>
+      <td>-0.131429</td>
+      <td>-0.030863</td>
+    </tr>
+    <tr>
+      <th>2015-09-01 13:00:00</th>
+      <td>4200</td>
+      <td>4200</td>
+      <td>0.000000</td>
+      <td>-0.030863</td>
+    </tr>
+    <tr>
+      <th>2015-09-01 14:00:00</th>
+      <td>4200</td>
+      <td>4100</td>
+      <td>-0.023810</td>
+      <td>-0.033780</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># display plots to gauge the data</span>
@@ -2991,7 +3152,7 @@ gg==
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># plot the 8-hour moving average with 10% reference line.</span>
@@ -4077,7 +4238,7 @@ RK5CYII=
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># filter points that exceeds 10% threshold</span>
@@ -4091,7 +4252,7 @@ RK5CYII=
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># display hours that exceeds threshold.</span>
@@ -4106,7 +4267,7 @@ RK5CYII=
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[12]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[13]:</div>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
@@ -4330,7 +4491,7 @@ RK5CYII=
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># plot days that exceed the 10% threshold.</span>
@@ -4345,11 +4506,11 @@ RK5CYII=
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[13]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[14]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x10e56e898&gt;</pre>
+<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x10e518978&gt;</pre>
 </div>
 
 </div>
