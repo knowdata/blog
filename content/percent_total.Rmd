@@ -1,0 +1,47 @@
+---
+title: "Window Calculation: Percent Total"
+author: Bernard Ade
+output: html_notebook
+---
+
+This post demonstrates how to query a dataset, calculate percent total and plot an interactive graph. Percent total is particularly useful for analyzing proportions of total.
+
+### Load libraries and dataset
+```{r}
+library(dplyr)
+library(lubridate)
+library(highcharter)
+superstore = read.csv("superstore.csv")
+```
+
+### Data Wrangling
+Use dplyr and lubridate to convert variables **order date** and **ship date** to a date format.
+```{r}
+superstore = 
+    superstore %>% 
+      mutate(Order.Date = mdy(Order.Date))%>%
+      mutate(Ship.Date = mdy(Ship.Date))%>%
+      arrange(Order.Date)
+tail(superstore)
+```
+
+### Window calculation
+Calculate percent total of sales.
+```{r}
+percent_total = 
+  superstore %>% 
+  mutate(year = year(Order.Date)) %>%
+  group_by(Segment, year)%>% 
+  summarise(sum_sales  = sum(Sales)) %>%
+  mutate(percent_of_total = round(sum_sales/sum(sum_sales)*100, 1)) 
+percent_total
+
+  
+```
+
+### Plot visualization
+Create a bar plot showing percent total for each segment.
+```{r}
+hc_add_series_df(highchart(), percent_total, "bar",  x = year, y = percent_of_total, group = Segment)
+
+```
