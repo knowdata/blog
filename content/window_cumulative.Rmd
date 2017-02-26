@@ -1,0 +1,54 @@
+---
+title: "Window Functions: Running Total"
+author: Bernard Ade
+date: 10-27-2016
+output: html_notebook
+---
+
+In the next series of posts titled **Window Functions**, I will like to demonstrate how to query a dataset, calculate several of the many window functions to describe and summarize data and plot an interactive graph.  In this post, we will calculate **Running Total of sales** from our superstore dataset.  Running total is particularly useful for analyzing the total of sales at any particular point in time.
+
+### Load Packages and Dataset
+```{r}
+library(dplyr)
+library(lubridate)
+library(highcharter)
+superstore = read.csv("superstore.csv")
+
+```
+
+### Data Wrangling
+Use dplyr and lubridate to convert variables **order date** and **ship date** to a date format.
+```{r}
+superstore = 
+    superstore %>% 
+      mutate(Order.Date = mdy(Order.Date))%>%
+      mutate(Ship.Date = mdy(Ship.Date))%>%
+      arrange(Order.Date)
+tail(superstore)
+```
+
+### Window Calculation
+Calculate running total of sales with the **cumsum** function.
+```{r}
+cumulative_1 = superstore %>%
+  mutate(cumsum_1 = round(cumsum(Sales)),2) %>%
+  select(Segment, Order.Date, Sales, cumsum_1)
+cumulative_1
+```
+
+### Plot Visualization
+Create a plot running total of sales.
+```{r}
+hchart(cumulative_1, "line", x = Order.Date, y = cumsum_1) %>%
+  hc_yAxis(title = list(text = "Running total of Sales (millions)"))
+```
+
+Lets plot running total of aales while comparing the 3 product segments.
+```{r}
+cumulative = superstore %>%
+  group_by(Segment, Order.Date)%>%
+  summarise(sum = sum(Sales)) %>%
+  mutate(cumsum = cumsum(sum))
+  hchart(cumulative, "line", x = Order.Date, y = cumsum, group = Segment) %>%
+  hc_yAxis(title = list(text = "Running total of Sales per Segment (millions)"))
+```
